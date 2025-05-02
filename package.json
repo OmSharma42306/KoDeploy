@@ -1,0 +1,20 @@
+{
+  "name": "vercel",
+  "version": "1.0.0",
+  "description": "A learning-focused project where I build a simplified version of **Vercel**, the popular frontend cloud platform for developers. This project aims to help me understand and implement the core concepts behind modern CI/CD, serverless deployment, and edge infrastructure.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^5.0.1",
+    "aws-sdk": "^2.1692.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "redis": "^5.0.0",
+    "simple-git": "^3.27.0"
+  }
+}

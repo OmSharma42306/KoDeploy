@@ -25,7 +25,9 @@ app.post('/send-repo-url',async (req:Request,res:Response)=>{
     
     try{
         const repoUrl = req.body.repoUrl;
-        
+        // added generate function get generate id.
+        const id = generate();
+        await simpleGit().clone(repoUrl,`output/${id}`);
         res.json({msg:"Done"})
 
     }catch(error){

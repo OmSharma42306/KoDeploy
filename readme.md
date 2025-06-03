@@ -37,6 +37,11 @@ A learning-focused project where I build a simplified version of **Vercel**, the
 
 ---
 
+# Build Server Approach...
+
+![image info](./kodeploy-approach-2.png)
+
+
 ## 🔧 Features (MVP Scope)
 
 - [1] Connect GitHub repo and auto-deploy on push

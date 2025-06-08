@@ -15,10 +15,12 @@ WORKDIR /home/app
 
 COPY build.sh .
 
+COPY script.js .
 
 # EXECUTING SCRIPT
 
 RUN chmod +x build.sh
+
 
 
 # ENTRYPOINT

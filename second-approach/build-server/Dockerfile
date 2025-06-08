@@ -16,6 +16,10 @@ WORKDIR /home/app
 COPY build.sh .
 
 COPY script.js .
+COPY package.json .
+COPY package-lock.json .
+COPY .env . 
+
 
 # EXECUTING SCRIPT
 

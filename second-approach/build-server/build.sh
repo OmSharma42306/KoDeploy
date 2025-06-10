@@ -10,5 +10,3 @@ git clone $GIT_REPO_URL /home/app/output
 npm install 
 
 node script.js
-
-tail -f /dev/null

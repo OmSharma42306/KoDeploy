@@ -6,8 +6,6 @@ const dotenv = require('dotenv')
 dotenv.config();
 
 const BASE_PATH = process.env.BASE_PATH;
-
-console.log("BASE",BASE);
 const PORT = 8000;
 
 const app = express();

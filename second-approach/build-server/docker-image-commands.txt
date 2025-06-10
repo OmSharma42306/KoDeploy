@@ -1,0 +1,5 @@
+# Docker Build image
+docker build -t omsharma.dev/build-server-kodeploy .
+
+# Run Image
+docker run -e GIT_REPO_URL=your_repository_url -e projectId=your_project_id omsharma.dev/build-server-kodeploy 

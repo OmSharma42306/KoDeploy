@@ -39,21 +39,21 @@ async function runCommnad(command){
 }
 
 
-async function uploadToS3(filesPath){
+async function uploadToS3(filesPath,projectId){
     const distContents = fs.readdirSync(filesPath,{recursive:true});
 
     for(const file of distContents){
-        console.log("File : ",file);
         const fullPath = path.join(filesPath,file);
+        
         if(fs.lstatSync(fullPath).isDirectory()) continue;
         // upload to s3 stuff..
         console.log("Upload to S3 this File : ",file);
         
         const fileStream = fs.createReadStream(fullPath);
-        
+        const s3Key = `${projectId}/${file}`
         const uploadCommand = new PutObjectCommand({
             Bucket:process.env.S3_BUCKET_NAME,
-            Key:file,
+            Key:s3Key,
             Body:fileStream,
 
         })
@@ -68,17 +68,17 @@ async function uploadToS3(filesPath){
 
 
 async function readContent(mainDir){
-    console.log("i am in")
+    
+    // just checking for correct files.
     await fs.readdir(mainDir,(err,files)=>{
         if(err){
             console.log(err);
-        }
-        console.log("CONTENTS : ",files);
-        
+        }        
+        console.log(files)
     });
 
     process.chdir(mainDir)
-    console.log("CURRENT WKI DIR : ",process.cwd());
+    
     
     await runCommnad(`ls`);    
     await runCommnad(`ls`);
@@ -87,12 +87,11 @@ async function readContent(mainDir){
     await runCommnad("npm run build");  
 
     const distPath = path.join(mainDir,"dist");
-    console.log("DIST PATH : ",distPath);
-    await uploadToS3(distPath);
+    const projectId = process.env.projectId;
+
+    await uploadToS3(distPath,projectId);
 
 }
-
-console.log("MAIN DIR ",mainDir);
 
 readContent(mainDir);
 

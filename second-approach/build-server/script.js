@@ -4,6 +4,8 @@ const {exec} = require('child_process');
 const util = require('util')
 const fsp = fs.promises;
 const dotenv = require('dotenv')
+const mime = require('mime-types');
+
 const {S3Client,PutObjectCommand} = require('@aws-sdk/client-s3');
 
 dotenv.config();
@@ -50,11 +52,13 @@ async function uploadToS3(filesPath,projectId){
         console.log("Upload to S3 this File : ",file);
         
         const fileStream = fs.createReadStream(fullPath);
-        const s3Key = `${projectId}/${file}`
+        const s3Key = `__outputs/${projectId}/${file}`
+        console.log("OMSSSSSSSSSSSSs",fullPath)
         const uploadCommand = new PutObjectCommand({
             Bucket:process.env.S3_BUCKET_NAME,
             Key:s3Key,
             Body:fileStream,
+            ContentType: mime.lookup(fullPath)
 
         })
 

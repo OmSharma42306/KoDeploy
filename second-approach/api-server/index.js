@@ -1,6 +1,9 @@
 const express = require('express');
 const randomSlug = require('random-word-slugs');
 const dotenv = require('dotenv')
+const {WebSocketServer} = require('ws');
+const Redis = require('ioredis')
+
 dotenv.config();
 const {RunTaskCommand,ECSClient} = require('@aws-sdk/client-ecs')
 
@@ -59,3 +62,43 @@ app.post('/deploy-project',async (req,res)=>{
 
 
 app.listen(PORT,()=>console.log(`Server Started at ${PORT}`))
+
+
+// Redis Subscriber 
+
+const subscriber = new Redis(process.env.REDIST_SERVICE_URI)
+
+// socket server
+
+const socketServer = new WebSocketServer({port:9001});
+
+let subscibeChannel;
+socketServer.on('connection',(ws)=>{
+    // console.log("Client",ws);
+    ws.on('error',console.error);
+
+    ws.on('message',(data)=>{
+
+        const {subscibe} = JSON.parse(data);
+        const channel = subscibe
+        console.log("Channel : ",channel);
+        subscibeChannel = ws;   
+        ws.send(`Subscribed to ${channel}`);
+    })
+
+     ws.send('hiiii')
+})
+
+
+async function initRedisSubsciber(){
+    subscriber.psubscribe('logs:*')
+    subscriber.on('pmessage',(pattern,channel,message)=>{
+        // send that message to 
+        console.log("Channel name",channel)
+        console.log("message: ",message);
+        // console.log("Subscribe Channel : ",subscibeChannel);
+        subscibeChannel.send(JSON.stringify({msg:message}));
+    })
+}
+
+initRedisSubsciber();

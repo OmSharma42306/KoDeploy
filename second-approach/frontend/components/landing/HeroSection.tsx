@@ -32,7 +32,7 @@ export function HeroSection() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <Button size="lg" asChild className="text-base px-8">
-              <Link href="/signup">
+              <Link href="/deploy">
                 Start Deploying
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

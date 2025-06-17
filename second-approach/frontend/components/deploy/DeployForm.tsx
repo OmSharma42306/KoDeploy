@@ -345,8 +345,9 @@ export function DeployForm({ onDeploy }: DeployFormProps) {
                   </div>
                 </>
               )}
+              
             </div>
-            
+     
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
               <ExternalLink className="h-4 w-4" />
               <span>Your app will be available at: </span>

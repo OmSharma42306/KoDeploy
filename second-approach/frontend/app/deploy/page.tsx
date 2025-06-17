@@ -1,7 +1,7 @@
 "use client";
 import {DeployForm} from '@/components/deploy/DeployForm'
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import axios from "axios";
@@ -18,19 +18,41 @@ interface DeployConfig {
 export default function DeployPage() {
   const [deploymentStatus, setDeploymentStatus] = useState<'idle' | 'deploying' | 'success' | 'failed'>('idle');
   const [deployedUrl, setDeployedUrl] = useState('');
+  const [channelName,setChannelName] = useState<string>('');
+  const [socket,setSocket] = useState<WebSocket|null>(null);
+  const [logs,setLogs] = useState<any[]>([]);
+  useEffect(()=>{
+   const socket = new WebSocket('ws://localhost:9001');
+    if(!socket){
+      return;
+    }
+  socket.onopen = () =>{
+    console.log("Socket connected");
+    setSocket(socket);
+  }
+  },[deploymentStatus]);
+
+  if(!socket) return;
+  socket.onmessage = (data:any) =>{
+
+    const dd:any = JSON.parse(data.data);
+    const f = JSON.parse(dd.msg);
+    setLogs(prevLogs=>[...prevLogs,f])
+    
+
+  }  
 
   const handleDeploy = async (config: DeployConfig) => {
     setDeploymentStatus('deploying');
-    
+    socket?.send(JSON.stringify({"subscibe":"OmkaChannel"}));
     const response = await axios.post(`http://localhost:9000/deploy-project`,{repoUrl:config.repoUrl});
     
     console.log(response.data);
-
-    setDeployedUrl(response.data.url);
-    // setTimeout(() => {
-    //   setDeploymentStatus('success');
-    //   setDeployedUrl('https://my-awesome-project.kodeploy.app');
-    // }, 3000);
+  
+    setTimeout(() => {
+      setDeploymentStatus('success');
+        setDeployedUrl(response.data.url);
+    }, 62000);
   };
 
   return (
@@ -81,6 +103,16 @@ export default function DeployPage() {
                       <span className="text-sm text-muted-foreground">Deploying to edge</span>
                     </div>
                   </div>
+                    {/*  Realtime Log Viewer */}
+        <div className="mt-4 bg-black text-green-400 text-xs rounded p-3 max-h-72 overflow-y-auto font-mono">
+          {logs.length === 0 ? (
+            <p className="text-muted-foreground">Waiting for logs...</p>
+          ) : (
+            logs.map((log, index) => (
+              <div key={index}>{log.logs}</div>
+            ))
+          )}
+        </div>
                 </div>
               </CardContent>
             </Card>

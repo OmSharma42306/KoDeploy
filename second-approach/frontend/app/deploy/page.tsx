@@ -4,6 +4,7 @@ import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import axios from "axios";
 
 interface DeployConfig {
   repoUrl: string;
@@ -18,14 +19,18 @@ export default function DeployPage() {
   const [deploymentStatus, setDeploymentStatus] = useState<'idle' | 'deploying' | 'success' | 'failed'>('idle');
   const [deployedUrl, setDeployedUrl] = useState('');
 
-  const handleDeploy = (config: DeployConfig) => {
+  const handleDeploy = async (config: DeployConfig) => {
     setDeploymentStatus('deploying');
     
-    // Simulate deployment process
-    setTimeout(() => {
-      setDeploymentStatus('success');
-      setDeployedUrl('https://my-awesome-project.kodeploy.app');
-    }, 3000);
+    const response = await axios.post(`http://localhost:9000/deploy-project`,{repoUrl:config.repoUrl});
+    
+    console.log(response.data);
+
+    setDeployedUrl(response.data.url);
+    // setTimeout(() => {
+    //   setDeploymentStatus('success');
+    //   setDeployedUrl('https://my-awesome-project.kodeploy.app');
+    // }, 3000);
   };
 
   return (

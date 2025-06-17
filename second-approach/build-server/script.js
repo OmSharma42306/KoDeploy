@@ -8,7 +8,7 @@ const mime = require('mime-types');
 const Redis = require('ioredis');
 
 
-const publisher = new Redis(process.env.REDIST_SERVICE_URI);
+const publisher = new Redis(process.env.REDIS_SERVICE_URI);
 
 async function publishLogs(logs){
     publisher.publish(`logs:${projectId}`,JSON.stringify({logs}));

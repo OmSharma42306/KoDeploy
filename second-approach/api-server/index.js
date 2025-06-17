@@ -3,6 +3,7 @@ const randomSlug = require('random-word-slugs');
 const dotenv = require('dotenv')
 const {WebSocketServer} = require('ws');
 const Redis = require('ioredis')
+const cors = require('cors');
 
 dotenv.config();
 const {RunTaskCommand,ECSClient} = require('@aws-sdk/client-ecs')
@@ -20,9 +21,10 @@ const app = express();
 const PORT = 9000;
 
 app.use(express.json())
+app.use(cors())
 
 app.post('/deploy-project',async (req,res)=>{
-
+    
     const repoUrl = req.body.repoUrl;
     const projectId = randomSlug.generateSlug(4);
     console.log(projectId);
@@ -45,8 +47,8 @@ app.post('/deploy-project',async (req,res)=>{
                     name:process.env.imageName,
                     environment:[
                         {name:"GIT_REPO_URL" , value:repoUrl},
-                        {name:"projectId",value:projectId}
-
+                        {name:"projectId",value:projectId},
+                        {name:"REDIS_SERVICE_URI",value:process.env.REDIS_SERVICE_URI}
                     ]
                 }
             ]
@@ -66,7 +68,7 @@ app.listen(PORT,()=>console.log(`Server Started at ${PORT}`))
 
 // Redis Subscriber 
 
-const subscriber = new Redis(process.env.REDIST_SERVICE_URI)
+const subscriber = new Redis(process.env.REDIS_SERVICE_URI)
 
 // socket server
 

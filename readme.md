@@ -3,6 +3,8 @@
 A learning-focused project where I build a simplified version of **Vercel**, the popular frontend cloud platform for developers. This project aims to help me understand and implement the core concepts behind modern CI/CD, serverless deployment, and edge infrastructure.
 
 ---
+# Youtube : https://youtu.be/Ue9oa_c9gro
+---
 
 ## 🎯 Goals
 

@@ -67,8 +67,8 @@ export function DashboardHeader() {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <LogOut className="mr-2 h-4 w-4" />
-                Log out
+                <LogOut onClick={()=>alert("LOGOUT OMYA")} className="mr-2 h-4 w-4" />
+                Log outdd
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
